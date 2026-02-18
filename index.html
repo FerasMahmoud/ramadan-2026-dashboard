@@ -6,464 +6,493 @@
     <title>Ramadan 2026 - Dashboard</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         :root {
             --primary-gold: #C9A227;
             --gold-light: #F4E4BC;
-            --gold-dark: #B8941F;
             --dark-bg: #0a0a0f;
-            --panel-bg: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
-            --safe-top: env(safe-area-inset-top, 0px);
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --panel-bg: rgba(255,255,255,0.04);
+            --border: rgba(255,255,255,0.08);
         }
-        
         html, body {
-            height: 100%;
-            overflow: hidden;
+            min-height: 100vh;
             font-family: 'Inter', sans-serif;
-            background: var(--dark-bg);
+            background: #0a0a0f;
             color: #fff;
             font-size: 14px;
-            touch-action: manipulation;
+            overflow-x: hidden;
         }
-        
-        .bg-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 20% 0%, rgba(201, 162, 39, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, rgba(201, 162, 39, 0.1) 0%, transparent 50%),
-                var(--dark-bg);
-            z-index: 0;
+        body {
+            background:
+                radial-gradient(ellipse at 20% 0%, rgba(201,162,39,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(201,162,39,0.1) 0%, transparent 50%),
+                #0a0a0f;
         }
-        
-        .app-container {
-            position: relative;
-            z-index: 10;
-            height: 100vh;
-            height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            padding-top: var(--safe-top);
-            padding-bottom: var(--safe-bottom);
-        }
-        
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 16px;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(20px);
+            padding: 14px 16px;
+            background: rgba(0,0,0,0.4);
             border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
-        
-        .brand {
+        .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .brand-icon { font-size: 1.6rem; }
+        .brand-text h1 {
+            font-size: 1rem; font-weight: 700;
+            background: linear-gradient(90deg, var(--primary-gold), var(--gold-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .brand-text p { font-size: 0.65rem; color: rgba(255,255,255,0.5); }
+        .header-controls { display: flex; gap: 8px; }
+        .control-btn {
+            padding: 8px 16px; border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.8);
+            font-size: 0.8rem; font-weight: 600; border-radius: 8px; cursor: pointer;
+        }
+        .control-btn.active { background: var(--primary-gold); color: #000; border-color: var(--primary-gold); }
+
+        .main-content { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+        /* Hero */
+        .hero-section { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .hero-card {
+            background: var(--panel-bg); border: 1px solid var(--border);
+            border-radius: 16px; padding: 16px; cursor: pointer;
+        }
+        .hero-card.primary {
+            background: linear-gradient(135deg, rgba(201,162,39,0.2), rgba(201,162,39,0.05));
+            border-color: rgba(201,162,39,0.3);
+        }
+        .hero-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+        .day-number { font-size: 3.5rem; font-weight: 800; color: var(--primary-gold); line-height: 1; }
+        .day-info { font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 6px; }
+        .next-prayer-name { font-size: 1rem; font-weight: 700; color: var(--primary-gold); }
+        .countdown-time { font-size: 2rem; font-weight: 300; color: #fff; font-family: 'Courier New', monospace; letter-spacing: 2px; margin-top: 4px; }
+
+        /* Maghrib Countdown Banner */
+        .maghrib-banner {
+            background: linear-gradient(135deg, rgba(201,162,39,0.25), rgba(201,162,39,0.08));
+            border: 1px solid var(--primary-gold);
+            border-radius: 14px;
+            padding: 14px 18px;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-        
-        .brand-icon {
-            font-size: 1.5rem;
-        }
-        
-        .brand-text h1 {
-            font-size: 1rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--primary-gold), var(--gold-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .brand-text p {
-            font-size: 0.65rem;
-            color: rgba(255, 255, 255, 0.5);
-        }
-        
-        .header-controls {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .control-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.8rem;
-            font-weight: 600;
-            border-radius: 8px;
+            justify-content: space-between;
             cursor: pointer;
-            transition: all 0.2s;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
         }
-        
-        .control-btn:active { transform: scale(0.95); opacity: 0.8; }
-        .control-btn.active { background: var(--primary-gold); color: #000; border-color: var(--primary-gold); }
-        
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-            padding: 12px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .hero-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            flex-shrink: 0;
-        }
-        
-        .hero-card {
-            background: var(--panel-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.2s;
-            user-select: none;
-        }
-        
-        .hero-card:active { transform: scale(0.98); border-color: var(--primary-gold); }
-        .hero-card.primary { background: linear-gradient(135deg, rgba(201, 162, 39, 0.2), rgba(201, 162, 39, 0.05)); border-color: rgba(201, 162, 39, 0.3); }
-        
-        .hero-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255, 255, 255, 0.5); margin-bottom: 8px; }
-        .day-number { font-size: 3.5rem; font-weight: 800; color: var(--primary-gold); line-height: 1; text-shadow: 0 0 20px rgba(201, 162, 39, 0.3); }
-        .day-info { font-size: 0.8rem; color: rgba(255, 255, 255, 0.7); margin-top: 6px; }
-        .countdown-time { font-size: 2.2rem; font-weight: 300; color: #fff; font-family: 'Courier New', monospace; letter-spacing: 2px; margin-top: 4px; }
-        .next-prayer-name { font-size: 1.1rem; font-weight: 700; color: var(--primary-gold); }
-        
-        .today-times-section { flex-shrink: 0; }
-        .section-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255, 255, 255, 0.5); margin-bottom: 10px; }
-        
-        .times-scroll {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
+        .maghrib-left { display: flex; flex-direction: column; }
+        .maghrib-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-light); margin-bottom: 4px; }
+        .maghrib-time-display { font-size: 1.4rem; font-weight: 800; color: var(--primary-gold); }
+        .maghrib-right { text-align: right; }
+        .maghrib-countdown-label { font-size: 0.62rem; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+        .maghrib-countdown { font-size: 1.8rem; font-weight: 300; font-family: 'Courier New', monospace; color: #fff; letter-spacing: 2px; }
+        .maghrib-iftar { font-size: 0.7rem; color: var(--gold-light); margin-top: 4px; font-weight: 600; }
+
+        /* Today's Times */
+        .section-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); margin-bottom: 10px; }
+        .times-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
         .times-scroll::-webkit-scrollbar { display: none; }
-        
         .time-pill {
-            flex-shrink: 0;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px 16px;
-            min-width: 80px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            user-select: none;
+            flex-shrink: 0; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+            border-radius: 12px; padding: 12px 16px; min-width: 80px; text-align: center; cursor: pointer;
         }
-        .time-pill:active { transform: scale(0.95); border-color: var(--primary-gold); }
-        .time-pill.fajr, .time-pill.maghrib { background: linear-gradient(135deg, rgba(201, 162, 39, 0.25), rgba(201, 162, 39, 0.1)); border-color: var(--primary-gold); }
+        .time-pill.fajr, .time-pill.maghrib {
+            background: linear-gradient(135deg, rgba(201,162,39,0.25), rgba(201,162,39,0.1));
+            border-color: var(--primary-gold);
+        }
         .time-pill.active { box-shadow: 0 0 0 2px var(--primary-gold); }
-        .pill-name { font-size: 0.65rem; text-transform: uppercase; color: rgba(255, 255, 255, 0.6); margin-bottom: 4px; }
+        .pill-name { font-size: 0.65rem; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
         .time-pill.fajr .pill-name, .time-pill.maghrib .pill-name { color: var(--gold-light); font-weight: 700; }
         .pill-time { font-size: 1.1rem; font-weight: 700; color: #fff; }
         .time-pill.fajr .pill-time, .time-pill.maghrib .pill-time { color: var(--primary-gold); font-size: 1.2rem; }
-        
-        .progress-section { flex-shrink: 0; background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; }
-        .progress-section:active { border-color: var(--primary-gold); }
-        .progress-header { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 8px; color: rgba(255, 255, 255, 0.6); }
-        .progress-bar { height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; }
+
+        /* Progress */
+        .progress-section {
+            background: var(--panel-bg); border: 1px solid var(--border);
+            border-radius: 12px; padding: 14px 16px; cursor: pointer;
+        }
+        .progress-header { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 8px; color: rgba(255,255,255,0.6); }
+        .progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary-gold), var(--gold-light)); border-radius: 3px; transition: width 0.5s; }
-        
-        .comp-bar { display: flex; background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; flex-shrink: 0; }
-        .comp-item { flex: 1; padding: 12px; text-align: center; border-right: 1px solid var(--border); cursor: pointer; transition: all 0.2s; user-select: none; }
+
+        /* City compare */
+        .comp-bar { display: flex; background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        .comp-item { flex: 1; padding: 12px; text-align: center; border-right: 1px solid var(--border); cursor: pointer; }
         .comp-item:last-child { border-right: none; }
-        .comp-item:active { background: rgba(201, 162, 39, 0.1); }
-        .comp-item.active { background: rgba(201, 162, 39, 0.15); }
-        .comp-name { font-size: 0.7rem; color: rgba(255, 255, 255, 0.5); margin-bottom: 4px; }
+        .comp-item.active { background: rgba(201,162,39,0.15); }
+        .comp-name { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
         .comp-time { font-size: 1.2rem; font-weight: 800; color: var(--primary-gold); }
-        .comp-diff { font-size: 0.6rem; color: rgba(255, 255, 255, 0.4); }
-        
-        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; flex-shrink: 0; }
-        .stat-pill { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s; user-select: none; }
-        .stat-pill:active { transform: scale(0.95); border-color: var(--primary-gold); }
+        .comp-diff { font-size: 0.6rem; color: rgba(255,255,255,0.4); }
+
+        /* Stats */
+        .stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+        .stat-pill { background: var(--panel-bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; }
         .stat-val { font-size: 1.3rem; font-weight: 800; color: var(--primary-gold); }
-        .stat-lbl { font-size: 0.6rem; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; margin-top: 2px; }
-        
-        .calendar-section { flex: 1; min-height: 300px; display: flex; flex-direction: column; background: var(--panel-bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(0, 0, 0, 0.2); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+        .stat-lbl { font-size: 0.6rem; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-top: 2px; }
+
+        /* Calendar */
+        .calendar-section {
+            background: var(--panel-bg); border: 1px solid var(--border);
+            border-radius: 16px; overflow: hidden; margin-bottom: 20px;
+        }
+        .calendar-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 16px; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--border);
+        }
         .calendar-title { font-size: 0.9rem; font-weight: 600; }
         .calendar-toggle { display: flex; gap: 4px; }
-        .cal-btn { padding: 6px 14px; border: none; background: transparent; color: rgba(255, 255, 255, 0.5); font-size: 0.8rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; user-select: none; font-weight: 600; }
-        .cal-btn:active { transform: scale(0.95); }
-        .cal-btn.active { background: rgba(201, 162, 39, 0.2); color: var(--primary-gold); }
-        
-        .days-container { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-        
-        .days-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        .days-table thead { position: sticky; top: 0; background: rgba(201, 162, 39, 0.15); z-index: 5; }
-        .days-table th { padding: 12px 8px; text-align: center; font-weight: 600; color: var(--gold-light); font-size: 0.7rem; text-transform: uppercase; border-bottom: 2px solid var(--primary-gold); }
-        .days-table td { padding: 14px 8px; text-align: center; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
-        .days-table tbody tr { transition: all 0.2s; cursor: pointer; }
-        .days-table tbody tr:active { background: rgba(201, 162, 39, 0.15); }
+        .cal-btn { padding: 6px 14px; border: none; background: transparent; color: rgba(255,255,255,0.5); font-size: 0.8rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .cal-btn.active { background: rgba(201,162,39,0.2); color: var(--primary-gold); }
+
+        .days-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+        .days-table thead { background: rgba(201,162,39,0.15); }
+        .days-table th { padding: 12px 6px; text-align: center; font-weight: 600; color: var(--gold-light); font-size: 0.68rem; text-transform: uppercase; border-bottom: 2px solid var(--primary-gold); }
+        .days-table td { padding: 13px 6px; text-align: center; border-bottom: 1px solid var(--border); }
+        .days-table tbody tr { cursor: pointer; }
         .days-table tbody tr.past { opacity: 0.35; }
-        .days-table tbody tr.current { background: linear-gradient(90deg, rgba(201, 162, 39, 0.25), rgba(201, 162, 39, 0.1)); }
-        .days-table tbody tr.current td { font-weight: 700; }
+        .days-table tbody tr.current { background: linear-gradient(90deg, rgba(201,162,39,0.25), rgba(201,162,39,0.08)); font-weight: 700; }
         .c-day { color: var(--primary-gold); font-weight: 800; font-size: 1rem; }
-        .c-date { color: rgba(255, 255, 255, 0.6); font-size: 0.75rem; }
-        .c-fajr, .c-maghrib { background: rgba(201, 162, 39, 0.15); color: var(--primary-gold); font-weight: 800; font-size: 0.95rem; }
-        .c-prayer { color: rgba(255, 255, 255, 0.9); }
-        .c-fast { color: var(--gold-light); font-size: 0.75rem; font-weight: 500; }
-        
-        .days-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 12px; }
-        .day-tile { aspect-ratio: 1; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; cursor: pointer; transition: all 0.2s; user-select: none; }
-        .day-tile:active { transform: scale(0.95); border-color: var(--primary-gold); }
+        .c-date { color: rgba(255,255,255,0.6); font-size: 0.72rem; }
+        .c-fajr, .c-maghrib { background: rgba(201,162,39,0.15); color: var(--primary-gold); font-weight: 800; }
+        .c-prayer { color: rgba(255,255,255,0.9); }
+        .c-fast { color: var(--gold-light); font-size: 0.72rem; font-weight: 500; }
+
+        .days-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; padding: 12px; }
+        .day-tile {
+            aspect-ratio: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+            border-radius: 12px; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; cursor: pointer;
+        }
         .day-tile.past { opacity: 0.35; }
-        .day-tile.current { background: rgba(201, 162, 39, 0.2); border-color: var(--primary-gold); box-shadow: 0 0 20px rgba(201, 162, 39, 0.2); }
+        .day-tile.current { background: rgba(201,162,39,0.2); border-color: var(--primary-gold); box-shadow: 0 0 20px rgba(201,162,39,0.2); }
         .tile-num { font-size: 1.4rem; font-weight: 800; color: var(--primary-gold); }
-        .tile-fajr, .tile-maghrib { font-size: 0.7rem; color: var(--primary-gold); font-weight: 700; margin-top: 4px; }
-        .tile-fajr::before { content: '🌅 '; font-size: 0.6rem; }
-        .tile-maghrib::before { content: '🌇 '; font-size: 0.6rem; }
-        
-        .jump-btn { position: fixed; bottom: 90px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: var(--primary-gold); color: #000; border: none; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(201, 162, 39, 0.4); cursor: pointer; z-index: 100; transition: all 0.2s; user-select: none; }
-        .jump-btn:active { transform: scale(0.9); }
-        .jump-btn.hidden { display: none; }
-        
-        .bottom-nav { display: flex; justify-content: space-around; padding: 12px 16px calc(12px + var(--safe-bottom)); background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(20px); border-top: 1px solid var(--border); flex-shrink: 0; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255, 255, 255, 0.5); font-size: 0.65rem; cursor: pointer; transition: all 0.2s; user-select: none; padding: 4px 12px; border-radius: 8px; }
-        .nav-item:active { color: var(--primary-gold); transform: scale(0.95); }
-        .nav-item.active { color: var(--primary-gold); }
-        .nav-icon { font-size: 1.3rem; transition: transform 0.2s; }
-        .nav-item:active .nav-icon { transform: scale(1.1); }
+        .tile-fajr, .tile-maghrib { font-size: 0.68rem; color: var(--primary-gold); font-weight: 700; margin-top: 3px; }
     </style>
 </head>
 <body>
-    <div class="bg-gradient"></div>
-    <div class="app-container">
-        <header class="header">
-            <div class="brand" onclick="showAppInfo()">
-                <span class="brand-icon">🌙</span>
-                <div class="brand-text">
-                    <h1>Ramadan 1447</h1>
-                    <p>2026 • Tap for info</p>
+    <header class="header">
+        <div class="brand" onclick="showAppInfo()">
+            <span class="brand-icon">🌙</span>
+            <div class="brand-text">
+                <h1>Ramadan 1447</h1>
+                <p>2026 • Tap for info</p>
+            </div>
+        </div>
+        <div class="header-controls">
+            <button class="control-btn active" id="btn-jeddah" onclick="switchCity('jeddah')">Jeddah</button>
+            <button class="control-btn" id="btn-riyadh" onclick="switchCity('riyadh')">Riyadh</button>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <!-- Hero -->
+        <section class="hero-section">
+            <div class="hero-card primary" onclick="scrollToToday()">
+                <div class="hero-label">Today • Tap to jump</div>
+                <div class="day-number" id="currentDay">--</div>
+                <div class="day-info" id="currentDate">--</div>
+            </div>
+            <div class="hero-card" onclick="updateCountdown()">
+                <div class="hero-label">Next Prayer</div>
+                <div class="next-prayer-name" id="nextPrayer">--</div>
+                <div class="countdown-time" id="countdown">--:--:--</div>
+            </div>
+        </section>
+
+        <!-- Maghrib / Iftar Countdown -->
+        <div class="maghrib-banner" onclick="showMaghribInfo()">
+            <div class="maghrib-left">
+                <div class="maghrib-label">🌇 Maghrib (Iftar)</div>
+                <div class="maghrib-time-display" id="maghribTimeDisplay">--:--</div>
+                <div class="maghrib-iftar" id="iftarStatus">Loading...</div>
+            </div>
+            <div class="maghrib-right">
+                <div class="maghrib-countdown-label">Time Till Iftar</div>
+                <div class="maghrib-countdown" id="maghribCountdown">--:--:--</div>
+            </div>
+        </div>
+
+        <!-- Today's Times -->
+        <section>
+            <div class="section-label">Today's Prayer Schedule</div>
+            <div class="times-scroll" id="todayTimes"></div>
+        </section>
+
+        <!-- Progress -->
+        <div class="progress-section" onclick="showProgressDetail()">
+            <div class="progress-header">
+                <span>Ramadan Progress</span>
+                <span id="progressText">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width:0%"></div>
+            </div>
+        </div>
+
+        <!-- City Comparison -->
+        <div class="comp-bar">
+            <div class="comp-item active" id="comp-jeddah" onclick="switchCity('jeddah')">
+                <div class="comp-name">🌊 Jeddah</div>
+                <div class="comp-time" id="jeddahFajr">--:--</div>
+                <div class="comp-diff">Base</div>
+            </div>
+            <div class="comp-item" id="comp-riyadh" onclick="switchCity('riyadh')">
+                <div class="comp-name">🏙️ Riyadh</div>
+                <div class="comp-time" id="riyadhFajr">--:--</div>
+                <div class="comp-diff">-30 min</div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat-pill" onclick="showStatDetail('done')">
+                <div class="stat-val" id="statDone">0</div>
+                <div class="stat-lbl">Days Done</div>
+            </div>
+            <div class="stat-pill" onclick="showStatDetail('left')">
+                <div class="stat-val" id="statLeft">30</div>
+                <div class="stat-lbl">Days Left</div>
+            </div>
+            <div class="stat-pill" onclick="showStatDetail('fast')">
+                <div class="stat-val">~13h</div>
+                <div class="stat-lbl">Avg Fast</div>
+            </div>
+            <div class="stat-pill" onclick="showStatDetail('prayers')">
+                <div class="stat-val">150</div>
+                <div class="stat-lbl">Prayers</div>
+            </div>
+        </div>
+
+        <!-- Calendar -->
+        <div class="calendar-section" id="calendarSection">
+            <div class="calendar-header">
+                <span class="calendar-title">📅 All 30 Days</span>
+                <div class="calendar-toggle">
+                    <button class="cal-btn active" id="btn-list" onclick="setView('list')">List</button>
+                    <button class="cal-btn" id="btn-grid" onclick="setView('grid')">Grid</button>
                 </div>
             </div>
-            <div class="header-controls">
-                <button class="control-btn active" id="btn-jeddah" onclick="switchCity('jeddah')">Jeddah</button>
-                <button class="control-btn" id="btn-riyadh" onclick="switchCity('riyadh')">Riyadh</button>
-            </div>
-        </header>
-        <main class="main-content" id="mainScroll">
-            <section class="hero-section">
-                <div class="hero-card primary" onclick="scrollToToday()">
-                    <div class="hero-label">Today • Tap to jump</div>
-                    <div class="day-number" id="currentDay">--</div>
-                    <div class="day-info" id="currentDate">--</div>
-                </div>
-                <div class="hero-card" onclick="refreshCountdown()">
-                    <div class="hero-label">Next Prayer • Tap refresh</div>
-                    <div class="next-prayer-name" id="nextPrayer">--</div>
-                    <div class="countdown-time" id="countdown">--:--:--</div>
-                </div>
-            </section>
-            <section class="today-times-section">
-                <div class="section-label">Today's Schedule • Tap any time</div>
-                <div class="times-scroll" id="todayTimes"></div>
-            </section>
-            <section class="progress-section" onclick="showProgressDetail()">
-                <div class="progress-header">
-                    <span>Ramadan Progress</span>
-                    <span id="progressText">0%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressBar" style="width: 0%"></div>
-                </div>
-            </section>
-            <section class="comp-bar">
-                <div class="comp-item active" id="comp-jeddah" onclick="switchCity('jeddah')">
-                    <div class="comp-name">🌊 Jeddah</div>
-                    <div class="comp-time" id="jeddahFajr">--:--</div>
-                    <div class="comp-diff">Base</div>
-                </div>
-                <div class="comp-item" id="comp-riyadh" onclick="switchCity('riyadh')">
-                    <div class="comp-name">🏙️ Riyadh</div>
-                    <div class="comp-time" id="riyadhFajr">--:--</div>
-                    <div class="comp-diff">-30 min</div>
-                </div>
-            </section>
-            <section class="stats-bar">
-                <div class="stat-pill" onclick="showStatDetail('done')">
-                    <div class="stat-val" id="statDone">0</div>
-                    <div class="stat-lbl">Days Done</div>
-                </div>
-                <div class="stat-pill" onclick="showStatDetail('left')">
-                    <div class="stat-val" id="statLeft">30</div>
-                    <div class="stat-lbl">Days Left</div>
-                </div>
-                <div class="stat-pill" onclick="showStatDetail('fast')">
-                    <div class="stat-val" id="statFast">13h</div>
-                    <div class="stat-lbl">Avg Fast</div>
-                </div>
-                <div class="stat-pill" onclick="showStatDetail('prayers')">
-                    <div class="stat-val">150</div>
-                    <div class="stat-lbl">Prayers</div>
-                </div>
-            </section>
-            <section class="calendar-section">
-                <div class="calendar-header">
-                    <span class="calendar-title">📅 All 30 Days</span>
-                    <div class="calendar-toggle">
-                        <button class="cal-btn active" id="btn-list" onclick="setView('list')">List</button>
-                        <button class="cal-btn" id="btn-grid" onclick="setView('grid')">Grid</button>
-                    </div>
-                </div>
-                <div class="days-container" id="daysContainer"></div>
-            </section>
-        </main>
-        <button class="jump-btn hidden" id="jumpBtn" onclick="scrollToToday()">📍</button>
-        <nav class="bottom-nav">
-            <div class="nav-item active" onclick="scrollToTop()"><span class="nav-icon">🏠</span><span>Today</span></div>
-            <div class="nav-item" onclick="scrollToCalendar()"><span class="nav-icon">📅</span><span>Days</span></div>
-            <div class="nav-item" onclick="scrollToToday()"><span class="nav-icon">📍</span><span>Jump</span></div>
-            <div class="nav-item" onclick="toggleView()"><span class="nav-icon">🔄</span><span>Switch</span></div>
-        </nav>
+            <div id="daysContainer"></div>
+        </div>
     </div>
+
     <script>
         const jeddahData = [
-            { day: 1, date: '2026-02-18', fajr: '05:35', dhuhr: '12:37', asr: '15:55', maghrib: '18:22', isha: '19:52', duration: '12h 47m' },
-            { day: 2, date: '2026-02-19', fajr: '05:34', dhuhr: '12:37', asr: '15:55', maghrib: '18:23', isha: '19:52', duration: '12h 49m' },
-            { day: 3, date: '2026-02-20', fajr: '05:33', dhuhr: '12:37', asr: '15:56', maghrib: '18:24', isha: '19:53', duration: '12h 51m' },
-            { day: 4, date: '2026-02-21', fajr: '05:32', dhuhr: '12:37', asr: '15:56', maghrib: '18:24', isha: '19:53', duration: '12h 52m' },
-            { day: 5, date: '2026-02-22', fajr: '05:31', dhuhr: '12:37', asr: '15:56', maghrib: '18:25', isha: '19:54', duration: '12h 54m' },
-            { day: 6, date: '2026-02-23', fajr: '05:30', dhuhr: '12:37', asr: '15:57', maghrib: '18:26', isha: '19:55', duration: '12h 56m' },
-            { day: 7, date: '2026-02-24', fajr: '05:29', dhuhr: '12:37', asr: '15:57', maghrib: '18:27', isha: '19:55', duration: '12h 58m' },
-            { day: 8, date: '2026-02-25', fajr: '05:28', dhuhr: '12:36', asr: '15:57', maghrib: '18:27', isha: '19:56', duration: '12h 59m' },
-            { day: 9, date: '2026-02-26', fajr: '05:27', dhuhr: '12:36', asr: '15:57', maghrib: '18:28', isha: '19:56', duration: '13h 01m' },
-            { day: 10, date: '2026-02-27', fajr: '05:26', dhuhr: '12:36', asr: '15:58', maghrib: '18:29', isha: '19:57', duration: '13h 03m' },
-            { day: 11, date: '2026-02-28', fajr: '05:25', dhuhr: '12:36', asr: '15:58', maghrib: '18:30', isha: '19:58', duration: '13h 05m' },
-            { day: 12, date: '2026-03-01', fajr: '05:24', dhuhr: '12:36', asr: '15:58', maghrib: '18:30', isha: '19:58', duration: '13h 06m' },
-            { day: 13, date: '2026-03-02', fajr: '05:23', dhuhr: '12:35', asr: '15:58', maghrib: '18:31', isha: '19:59', duration: '13h 08m' },
-            { day: 14, date: '2026-03-03', fajr: '05:22', dhuhr: '12:35', asr: '15:58', maghrib: '18:32', isha: '20:00', duration: '13h 10m' },
-            { day: 15, date: '2026-03-04', fajr: '05:21', dhuhr: '12:35', asr: '15:59', maghrib: '18:32', isha: '20:00', duration: '13h 11m' },
-            { day: 16, date: '2026-03-05', fajr: '05:20', dhuhr: '12:35', asr: '15:59', maghrib: '18:33', isha: '20:01', duration: '13h 13m' },
-            { day: 17, date: '2026-03-06', fajr: '05:19', dhuhr: '12:34', asr: '15:59', maghrib: '18:34', isha: '20:02', duration: '13h 15m' },
-            { day: 18, date: '2026-03-07', fajr: '05:18', dhuhr: '12:34', asr: '15:59', maghrib: '18:34', isha: '20:02', duration: '13h 16m' },
-            { day: 19, date: '2026-03-08', fajr: '05:17', dhuhr: '12:34', asr: '15:59', maghrib: '18:35', isha: '20:03', duration: '13h 18m' },
-            { day: 20, date: '2026-03-09', fajr: '05:16', dhuhr: '12:34', asr: '16:00', maghrib: '18:36', isha: '20:04', duration: '13h 20m' },
-            { day: 21, date: '2026-03-10', fajr: '05:15', dhuhr: '12:33', asr: '16:00', maghrib: '18:36', isha: '20:04', duration: '13h 21m' },
-            { day: 22, date: '2026-03-11', fajr: '05:14', dhuhr: '12:33', asr: '16:00', maghrib: '18:37', isha: '20:05', duration: '13h 23m' },
-            { day: 23, date: '2026-03-12', fajr: '05:13', dhuhr: '12:33', asr: '16:00', maghrib: '18:38', isha: '20:06', duration: '13h 25m' },
-            { day: 24, date: '2026-03-13', fajr: '05:12', dhuhr: '12:33', asr: '16:00', maghrib: '18:38', isha: '20:06', duration: '13h 26m' },
-            { day: 25, date: '2026-03-14', fajr: '05:11', dhuhr: '12:32', asr: '16:00', maghrib: '18:39', isha: '20:07', duration: '13h 28m' },
-            { day: 26, date: '2026-03-15', fajr: '05:10', dhuhr: '12:32', asr: '16:00', maghrib: '18:40', isha: '20:08', duration: '13h 30m' },
-            { day: 27, date: '2026-03-16', fajr: '05:09', dhuhr: '12:32', asr: '16:01', maghrib: '18:40', isha: '20:08', duration: '13h 31m' },
-            { day: 28, date: '2026-03-17', fajr: '05:08', dhuhr: '12:31', asr: '16:01', maghrib: '18:41', isha: '20:09', duration: '13h 33m' },
-            { day: 29, date: '2026-03-18', fajr: '05:07', dhuhr: '12:31', asr: '16:01', maghrib: '18:42', isha: '20:10', duration: '13h 35m' },
-            { day: 30, date: '2026-03-19', fajr: '05:06', dhuhr: '12:31', asr: '16:01', maghrib: '18:42', isha: '20:10', duration: '13h 36m' }
+            {day:1,date:'2026-02-18',fajr:'05:35',dhuhr:'12:37',asr:'15:55',maghrib:'18:22',isha:'19:52',duration:'12h 47m'},
+            {day:2,date:'2026-02-19',fajr:'05:34',dhuhr:'12:37',asr:'15:55',maghrib:'18:23',isha:'19:52',duration:'12h 49m'},
+            {day:3,date:'2026-02-20',fajr:'05:33',dhuhr:'12:37',asr:'15:56',maghrib:'18:24',isha:'19:53',duration:'12h 51m'},
+            {day:4,date:'2026-02-21',fajr:'05:32',dhuhr:'12:37',asr:'15:56',maghrib:'18:24',isha:'19:53',duration:'12h 52m'},
+            {day:5,date:'2026-02-22',fajr:'05:31',dhuhr:'12:37',asr:'15:56',maghrib:'18:25',isha:'19:54',duration:'12h 54m'},
+            {day:6,date:'2026-02-23',fajr:'05:30',dhuhr:'12:37',asr:'15:57',maghrib:'18:26',isha:'19:55',duration:'12h 56m'},
+            {day:7,date:'2026-02-24',fajr:'05:29',dhuhr:'12:37',asr:'15:57',maghrib:'18:27',isha:'19:55',duration:'12h 58m'},
+            {day:8,date:'2026-02-25',fajr:'05:28',dhuhr:'12:36',asr:'15:57',maghrib:'18:27',isha:'19:56',duration:'12h 59m'},
+            {day:9,date:'2026-02-26',fajr:'05:27',dhuhr:'12:36',asr:'15:57',maghrib:'18:28',isha:'19:56',duration:'13h 01m'},
+            {day:10,date:'2026-02-27',fajr:'05:26',dhuhr:'12:36',asr:'15:58',maghrib:'18:29',isha:'19:57',duration:'13h 03m'},
+            {day:11,date:'2026-02-28',fajr:'05:25',dhuhr:'12:36',asr:'15:58',maghrib:'18:30',isha:'19:58',duration:'13h 05m'},
+            {day:12,date:'2026-03-01',fajr:'05:24',dhuhr:'12:36',asr:'15:58',maghrib:'18:30',isha:'19:58',duration:'13h 06m'},
+            {day:13,date:'2026-03-02',fajr:'05:23',dhuhr:'12:35',asr:'15:58',maghrib:'18:31',isha:'19:59',duration:'13h 08m'},
+            {day:14,date:'2026-03-03',fajr:'05:22',dhuhr:'12:35',asr:'15:58',maghrib:'18:32',isha:'20:00',duration:'13h 10m'},
+            {day:15,date:'2026-03-04',fajr:'05:21',dhuhr:'12:35',asr:'15:59',maghrib:'18:32',isha:'20:00',duration:'13h 11m'},
+            {day:16,date:'2026-03-05',fajr:'05:20',dhuhr:'12:35',asr:'15:59',maghrib:'18:33',isha:'20:01',duration:'13h 13m'},
+            {day:17,date:'2026-03-06',fajr:'05:19',dhuhr:'12:34',asr:'15:59',maghrib:'18:34',isha:'20:02',duration:'13h 15m'},
+            {day:18,date:'2026-03-07',fajr:'05:18',dhuhr:'12:34',asr:'15:59',maghrib:'18:34',isha:'20:02',duration:'13h 16m'},
+            {day:19,date:'2026-03-08',fajr:'05:17',dhuhr:'12:34',asr:'15:59',maghrib:'18:35',isha:'20:03',duration:'13h 18m'},
+            {day:20,date:'2026-03-09',fajr:'05:16',dhuhr:'12:34',asr:'16:00',maghrib:'18:36',isha:'20:04',duration:'13h 20m'},
+            {day:21,date:'2026-03-10',fajr:'05:15',dhuhr:'12:33',asr:'16:00',maghrib:'18:36',isha:'20:04',duration:'13h 21m'},
+            {day:22,date:'2026-03-11',fajr:'05:14',dhuhr:'12:33',asr:'16:00',maghrib:'18:37',isha:'20:05',duration:'13h 23m'},
+            {day:23,date:'2026-03-12',fajr:'05:13',dhuhr:'12:33',asr:'16:00',maghrib:'18:38',isha:'20:06',duration:'13h 25m'},
+            {day:24,date:'2026-03-13',fajr:'05:12',dhuhr:'12:33',asr:'16:00',maghrib:'18:38',isha:'20:06',duration:'13h 26m'},
+            {day:25,date:'2026-03-14',fajr:'05:11',dhuhr:'12:32',asr:'16:00',maghrib:'18:39',isha:'20:07',duration:'13h 28m'},
+            {day:26,date:'2026-03-15',fajr:'05:10',dhuhr:'12:32',asr:'16:00',maghrib:'18:40',isha:'20:08',duration:'13h 30m'},
+            {day:27,date:'2026-03-16',fajr:'05:09',dhuhr:'12:32',asr:'16:01',maghrib:'18:40',isha:'20:08',duration:'13h 31m'},
+            {day:28,date:'2026-03-17',fajr:'05:08',dhuhr:'12:31',asr:'16:01',maghrib:'18:41',isha:'20:09',duration:'13h 33m'},
+            {day:29,date:'2026-03-18',fajr:'05:07',dhuhr:'12:31',asr:'16:01',maghrib:'18:42',isha:'20:10',duration:'13h 35m'},
+            {day:30,date:'2026-03-19',fajr:'05:06',dhuhr:'12:31',asr:'16:01',maghrib:'18:42',isha:'20:10',duration:'13h 36m'}
         ];
         const riyadhData = [
-            { day: 1, date: '2026-02-18', fajr: '05:06', dhuhr: '12:07', asr: '15:23', maghrib: '17:49', isha: '19:19', duration: '12h 43m' },
-            { day: 2, date: '2026-02-19', fajr: '05:05', dhuhr: '12:07', asr: '15:24', maghrib: '17:50', isha: '19:20', duration: '12h 45m' },
-            { day: 3, date: '2026-02-20', fajr: '05:04', dhuhr: '12:07', asr: '15:24', maghrib: '17:51', isha: '19:21', duration: '12h 47m' },
-            { day: 4, date: '2026-02-21', fajr: '05:03', dhuhr: '12:07', asr: '15:24', maghrib: '17:52', isha: '19:21', duration: '12h 49m' },
-            { day: 5, date: '2026-02-22', fajr: '05:02', dhuhr: '12:07', asr: '15:25', maghrib: '17:52', isha: '19:22', duration: '12h 50m' },
-            { day: 6, date: '2026-02-23', fajr: '05:01', dhuhr: '12:07', asr: '15:25', maghrib: '17:53', isha: '19:23', duration: '12h 52m' },
-            { day: 7, date: '2026-02-24', fajr: '05:00', dhuhr: '12:06', asr: '15:25', maghrib: '17:54', isha: '19:23', duration: '12h 54m' },
-            { day: 8, date: '2026-02-25', fajr: '04:59', dhuhr: '12:06', asr: '15:25', maghrib: '17:55', isha: '19:24', duration: '12h 56m' },
-            { day: 9, date: '2026-02-26', fajr: '04:58', dhuhr: '12:06', asr: '15:26', maghrib: '17:55', isha: '19:25', duration: '12h 57m' },
-            { day: 10, date: '2026-02-27', fajr: '04:57', dhuhr: '12:06', asr: '15:26', maghrib: '17:56', isha: '19:25', duration: '12h 59m' },
-            { day: 11, date: '2026-02-28', fajr: '04:56', dhuhr: '12:06', asr: '15:26', maghrib: '17:57', isha: '19:26', duration: '13h 01m' },
-            { day: 12, date: '2026-03-01', fajr: '04:55', dhuhr: '12:05', asr: '15:26', maghrib: '17:58', isha: '19:27', duration: '13h 03m' },
-            { day: 13, date: '2026-03-02', fajr: '04:54', dhuhr: '12:05', asr: '15:26', maghrib: '17:58', isha: '19:27', duration: '13h 04m' },
-            { day: 14, date: '2026-03-03', fajr: '04:53', dhuhr: '12:05', asr: '15:27', maghrib: '17:59', isha: '19:28', duration: '13h 06m' },
-            { day: 15, date: '2026-03-04', fajr: '04:52', dhuhr: '12:05', asr: '15:27', maghrib: '18:00', isha: '19:29', duration: '13h 08m' },
-            { day: 16, date: '2026-03-05', fajr: '04:51', dhuhr: '12:04', asr: '15:27', maghrib: '18:00', isha: '19:29', duration: '13h 09m' },
-            { day: 17, date: '2026-03-06', fajr: '04:50', dhuhr: '12:04', asr: '15:27', maghrib: '18:01', isha: '19:30', duration: '13h 11m' },
-            { day: 18, date: '2026-03-07', fajr: '04:49', dhuhr: '12:04', asr: '15:27', maghrib: '18:02', isha: '19:31', duration: '13h 13m' },
-            { day: 19, date: '2026-03-08', fajr: '04:48', dhuhr: '12:04', asr: '15:28', maghrib: '18:02', isha: '19:31', duration: '13h 14m' },
-            { day: 20, date: '2026-03-09', fajr: '04:47', dhuhr: '12:03', asr: '15:28', maghrib: '18:03', isha: '19:32', duration: '13h 16m' },
-            { day: 21, date: '2026-03-10', fajr: '04:46', dhuhr: '12:03', asr: '15:28', maghrib: '18:04', isha: '19:33', duration: '13h 18m' },
-            { day: 22, date: '2026-03-11', fajr: '04:45', dhuhr: '12:03', asr: '15:28', maghrib: '18:04', isha: '19:33', duration: '13h 19m' },
-            { day: 23, date: '2026-03-12', fajr: '04:44', dhuhr: '12:03', asr: '15:28', maghrib: '18:05', isha: '19:34', duration: '13h 21m' },
-            { day: 24, date: '2026-03-13', fajr: '04:43', dhuhr: '12:02', asr: '15:28', maghrib: '18:06', isha: '19:35', duration: '13h 23m' },
-            { day: 25, date: '2026-03-14', fajr: '04:42', dhuhr: '12:02', asr: '15:29', maghrib: '18:06', isha: '19:35', duration: '13h 24m' },
-            { day: 26, date: '2026-03-15', fajr: '04:41', dhuhr: '12:02', asr: '15:29', maghrib: '18:07', isha: '19:36', duration: '13h 26m' },
-            { day: 27, date: '2026-03-16', fajr: '04:40', dhuhr: '12:02', asr: '15:29', maghrib: '18:08', isha: '19:37', duration: '13h 28m' },
-            { day: 28, date: '2026-03-17', fajr: '04:39', dhuhr: '12:01', asr: '15:29', maghrib: '18:08', isha: '19:37', duration: '13h 29m' },
-            { day: 29, date: '2026-03-18', fajr: '04:38', dhuhr: '12:01', asr: '15:29', maghrib: '18:09', isha: '19:38', duration: '13h 31m' },
-            { day: 30, date: '2026-03-19', fajr: '04:37', dhuhr: '12:01', asr: '15:29', maghrib: '18:10', isha: '19:39', duration: '13h 33m' }
+            {day:1,date:'2026-02-18',fajr:'05:06',dhuhr:'12:07',asr:'15:23',maghrib:'17:49',isha:'19:19',duration:'12h 43m'},
+            {day:2,date:'2026-02-19',fajr:'05:05',dhuhr:'12:07',asr:'15:24',maghrib:'17:50',isha:'19:20',duration:'12h 45m'},
+            {day:3,date:'2026-02-20',fajr:'05:04',dhuhr:'12:07',asr:'15:24',maghrib:'17:51',isha:'19:21',duration:'12h 47m'},
+            {day:4,date:'2026-02-21',fajr:'05:03',dhuhr:'12:07',asr:'15:24',maghrib:'17:52',isha:'19:21',duration:'12h 49m'},
+            {day:5,date:'2026-02-22',fajr:'05:02',dhuhr:'12:07',asr:'15:25',maghrib:'17:52',isha:'19:22',duration:'12h 50m'},
+            {day:6,date:'2026-02-23',fajr:'05:01',dhuhr:'12:07',asr:'15:25',maghrib:'17:53',isha:'19:23',duration:'12h 52m'},
+            {day:7,date:'2026-02-24',fajr:'05:00',dhuhr:'12:06',asr:'15:25',maghrib:'17:54',isha:'19:23',duration:'12h 54m'},
+            {day:8,date:'2026-02-25',fajr:'04:59',dhuhr:'12:06',asr:'15:25',maghrib:'17:55',isha:'19:24',duration:'12h 56m'},
+            {day:9,date:'2026-02-26',fajr:'04:58',dhuhr:'12:06',asr:'15:26',maghrib:'17:55',isha:'19:25',duration:'12h 57m'},
+            {day:10,date:'2026-02-27',fajr:'04:57',dhuhr:'12:06',asr:'15:26',maghrib:'17:56',isha:'19:25',duration:'12h 59m'},
+            {day:11,date:'2026-02-28',fajr:'04:56',dhuhr:'12:06',asr:'15:26',maghrib:'17:57',isha:'19:26',duration:'13h 01m'},
+            {day:12,date:'2026-03-01',fajr:'04:55',dhuhr:'12:05',asr:'15:26',maghrib:'17:58',isha:'19:27',duration:'13h 03m'},
+            {day:13,date:'2026-03-02',fajr:'04:54',dhuhr:'12:05',asr:'15:26',maghrib:'17:58',isha:'19:27',duration:'13h 04m'},
+            {day:14,date:'2026-03-03',fajr:'04:53',dhuhr:'12:05',asr:'15:27',maghrib:'17:59',isha:'19:28',duration:'13h 06m'},
+            {day:15,date:'2026-03-04',fajr:'04:52',dhuhr:'12:05',asr:'15:27',maghrib:'18:00',isha:'19:29',duration:'13h 08m'},
+            {day:16,date:'2026-03-05',fajr:'04:51',dhuhr:'12:04',asr:'15:27',maghrib:'18:00',isha:'19:29',duration:'13h 09m'},
+            {day:17,date:'2026-03-06',fajr:'04:50',dhuhr:'12:04',asr:'15:27',maghrib:'18:01',isha:'19:30',duration:'13h 11m'},
+            {day:18,date:'2026-03-07',fajr:'04:49',dhuhr:'12:04',asr:'15:27',maghrib:'18:02',isha:'19:31',duration:'13h 13m'},
+            {day:19,date:'2026-03-08',fajr:'04:48',dhuhr:'12:04',asr:'15:28',maghrib:'18:02',isha:'19:31',duration:'13h 14m'},
+            {day:20,date:'2026-03-09',fajr:'04:47',dhuhr:'12:03',asr:'15:28',maghrib:'18:03',isha:'19:32',duration:'13h 16m'},
+            {day:21,date:'2026-03-10',fajr:'04:46',dhuhr:'12:03',asr:'15:28',maghrib:'18:04',isha:'19:33',duration:'13h 18m'},
+            {day:22,date:'2026-03-11',fajr:'04:45',dhuhr:'12:03',asr:'15:28',maghrib:'18:04',isha:'19:33',duration:'13h 19m'},
+            {day:23,date:'2026-03-12',fajr:'04:44',dhuhr:'12:03',asr:'15:28',maghrib:'18:05',isha:'19:34',duration:'13h 21m'},
+            {day:24,date:'2026-03-13',fajr:'04:43',dhuhr:'12:02',asr:'15:28',maghrib:'18:06',isha:'19:35',duration:'13h 23m'},
+            {day:25,date:'2026-03-14',fajr:'04:42',dhuhr:'12:02',asr:'15:29',maghrib:'18:06',isha:'19:35',duration:'13h 24m'},
+            {day:26,date:'2026-03-15',fajr:'04:41',dhuhr:'12:02',asr:'15:29',maghrib:'18:07',isha:'19:36',duration:'13h 26m'},
+            {day:27,date:'2026-03-16',fajr:'04:40',dhuhr:'12:02',asr:'15:29',maghrib:'18:08',isha:'19:37',duration:'13h 28m'},
+            {day:28,date:'2026-03-17',fajr:'04:39',dhuhr:'12:01',asr:'15:29',maghrib:'18:08',isha:'19:37',duration:'13h 29m'},
+            {day:29,date:'2026-03-18',fajr:'04:38',dhuhr:'12:01',asr:'15:29',maghrib:'18:09',isha:'19:38',duration:'13h 31m'},
+            {day:30,date:'2026-03-19',fajr:'04:37',dhuhr:'12:01',asr:'15:29',maghrib:'18:10',isha:'19:39',duration:'13h 33m'}
         ];
-        let currentCity = 'jeddah', currentData = jeddahData, currentDayIndex = -1, currentView = 'list', countdownInterval;
-        function getCurrentDayIndex() { const now = new Date(); return currentData.findIndex(d => d.date === now.toISOString().split('T')[0]); }
-        function getNextPrayer(d) {
-            const now = new Date(), t = now.getHours()*60+now.getMinutes();
-            const prayers = [{name:'Fajr',time:d.fajr},{name:'Dhuhr',time:d.dhuhr},{name:'Asr',time:d.asr},{name:'Maghrib',time:d.maghrib},{name:'Isha',time:d.isha}];
-            for (let p of prayers) { const [h,m]=p.time.split(':').map(Number); if(h*60+m>t) return {...p,minutes:h*60+m}; }
-            return {...prayers[0],minutes:null};
+
+        let currentCity = 'jeddah', currentData = jeddahData, currentDayIndex = -1, currentView = 'list';
+        let mainInterval;
+
+        function getTodayStr() { return new Date().toISOString().split('T')[0]; }
+        function getCurrentDayIndex() { return currentData.findIndex(d => d.date === getTodayStr()); }
+
+        function timeToMinutes(t) { const [h,m]=t.split(':').map(Number); return h*60+m; }
+        function nowMinutes() { const n=new Date(); return n.getHours()*60+n.getMinutes()+n.getSeconds()/60; }
+
+        function formatCountdown(diffMinutes) {
+            if(diffMinutes < 0) diffMinutes += 24*60;
+            const h=Math.floor(diffMinutes/60), m=Math.floor(diffMinutes%60), s=Math.floor((diffMinutes*60)%60);
+            return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
         }
-        function updateCountdown() {
-            if(currentDayIndex===-1) return;
-            const now=new Date(), t=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
-            const np=getNextPrayer(currentData[currentDayIndex]);
-            if(np.minutes){const[h,m]=np.time.split(':').map(Number),pm=h*60+m;let d=pm-t;if(d<0)d+=1440;const hh=Math.floor(d/60),mm=Math.floor(d%60),ss=Math.floor(d*60%60);document.getElementById('countdown').textContent=`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;document.getElementById('nextPrayer').textContent=np.name;}
+
+        function getNextPrayer(day) {
+            const now = nowMinutes();
+            const prayers = ['fajr','dhuhr','asr','maghrib','isha'];
+            for(let p of prayers) {
+                const pm = timeToMinutes(day[p]);
+                if(pm > now) return {name: p.charAt(0).toUpperCase()+p.slice(1), time: day[p], minutes: pm};
+            }
+            return {name:'Fajr', time:day.fajr, minutes:timeToMinutes(day.fajr)};
         }
+
+        function tick() {
+            if(currentDayIndex === -1) return;
+            const day = currentData[currentDayIndex];
+            const now = nowMinutes();
+
+            // Next prayer countdown
+            const np = getNextPrayer(day);
+            document.getElementById('nextPrayer').textContent = np.name;
+            document.getElementById('countdown').textContent = formatCountdown(np.minutes - now);
+
+            // Maghrib countdown
+            const maghribMin = timeToMinutes(day.maghrib);
+            const diff = maghribMin - now;
+            document.getElementById('maghribTimeDisplay').textContent = day.maghrib;
+
+            if(diff > 0) {
+                document.getElementById('maghribCountdown').textContent = formatCountdown(diff);
+                const h = Math.floor(diff/60), m = Math.floor(diff%60);
+                document.getElementById('iftarStatus').textContent = `Iftar in ${h > 0 ? h+'h ' : ''}${m}m`;
+            } else {
+                document.getElementById('maghribCountdown').textContent = '✅ 00:00:00';
+                document.getElementById('iftarStatus').textContent = '🎉 Iftar time! Mubarak!';
+            }
+        }
+
         function renderHeader() {
-            if(currentDayIndex===-1) return;
-            const day=currentData[currentDayIndex];
-            document.getElementById('currentDay').textContent=day.day;
-            document.getElementById('currentDate').textContent=new Date(day.date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
-            const np=getNextPrayer(day);
-            const timesHtml=[{name:'Fajr',time:day.fajr},{name:'Dhuhr',time:day.dhuhr},{name:'Asr',time:day.asr},{name:'Maghrib',time:day.maghrib},{name:'Isha',time:day.isha}].map(p=>{let c='time-pill';if(p.name==='Fajr')c+=' fajr';if(p.name==='Maghrib')c+=' maghrib';if(np.name===p.name)c+=' active';return`<div class="${c}" onclick="showPrayerInfo('${p.name}','${p.time}')"><div class="pill-name">${p.name}</div><div class="pill-time">${p.time}</div></div>`;}).join('');
-            document.getElementById('todayTimes').innerHTML=timesHtml;
-            document.getElementById('statDone').textContent=currentDayIndex;
-            document.getElementById('statLeft').textContent=30-currentDayIndex;
-            const prog=(currentDayIndex/30)*100;
-            document.getElementById('progressBar').style.width=prog+'%';
-            document.getElementById('progressText').textContent=Math.round(prog)+'%';
-            document.getElementById('jeddahFajr').textContent=jeddahData[currentDayIndex].fajr;
-            document.getElementById('riyadhFajr').textContent=riyadhData[currentDayIndex].fajr;
-            if(countdownInterval)clearInterval(countdownInterval);
-            updateCountdown();countdownInterval=setInterval(updateCountdown,1000);
+            if(currentDayIndex === -1) {
+                document.getElementById('currentDay').textContent = '?';
+                document.getElementById('currentDate').textContent = 'Not in Ramadan yet';
+                return;
+            }
+            const day = currentData[currentDayIndex];
+            document.getElementById('currentDay').textContent = day.day;
+            document.getElementById('currentDate').textContent = new Date(day.date).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+
+            const np = getNextPrayer(day);
+            const pills = ['fajr','dhuhr','asr','maghrib','isha'].map(p => {
+                let cls = 'time-pill';
+                if(p==='fajr') cls+=' fajr';
+                if(p==='maghrib') cls+=' maghrib';
+                if(np.name.toLowerCase()===p) cls+=' active';
+                const label = p.charAt(0).toUpperCase()+p.slice(1);
+                return `<div class="${cls}" onclick="showPrayerInfo('${label}','${day[p]}')"><div class="pill-name">${label}</div><div class="pill-time">${day[p]}</div></div>`;
+            }).join('');
+            document.getElementById('todayTimes').innerHTML = pills;
+
+            const done = currentDayIndex;
+            document.getElementById('statDone').textContent = done;
+            document.getElementById('statLeft').textContent = 30-done;
+            const pct = Math.round(done/30*100);
+            document.getElementById('progressBar').style.width = pct+'%';
+            document.getElementById('progressText').textContent = pct+'%';
+            document.getElementById('jeddahFajr').textContent = jeddahData[currentDayIndex].fajr;
+            document.getElementById('riyadhFajr').textContent = riyadhData[currentDayIndex].fajr;
         }
+
         function renderDays() {
-            const c=document.getElementById('daysContainer'),today=new Date().toISOString().split('T')[0];
-            if(currentView==='list'){c.innerHTML=`<table class="days-table"><thead><tr><th>Day</th><th>Date</th><th class="c-fajr">🌅 Fajr</th><th>Dhuhr</th><th>Asr</th><th class="c-maghrib">🌇 Maghrib</th><th>Isha</th><th>Fast</th></tr></thead><tbody>${currentData.map((d,i)=>{const ip=d.date<today,ic=d.date===today,dn=new Date(d.date).toLocaleDateString('en-US',{weekday:'short'});return`<tr id="day-${i}" class="${ip?'past':''} ${ic?'current':''}" onclick="selectDay(${i})"><td class="c-day">${d.day}</td><td class="c-date">${dn} ${new Date(d.date).getDate()}</td><td class="c-fajr">${d.fajr}</td><td class="c-prayer">${d.dhuhr}</td><td class="c-prayer">${d.asr}</td><td class="c-maghrib">${d.maghrib}</td><td class="c-prayer">${d.isha}</td><td class="c-fast">${d.duration}</td></tr>`;}).join('')}</tbody></table>`;}
-            else{c.innerHTML=`<div class="days-grid">${currentData.map((d,i)=>{const ip=d.date<today,ic=d.date===today;return`<div class="day-tile ${ip?'past':''} ${ic?'current':''}" id="day-${i}" onclick="selectDay(${i})"><div class="tile-num">${d.day}</div><div class="tile-fajr">${d.fajr}</div><div class="tile-maghrib">${d.maghrib}</div></div>`;}).join('')}</div>`;}
+            const c = document.getElementById('daysContainer');
+            const today = getTodayStr();
+            if(currentView === 'list') {
+                c.innerHTML = `<table class="days-table">
+                    <thead><tr><th>Day</th><th>Date</th><th class="c-fajr">🌅 Fajr</th><th>Dhuhr</th><th>Asr</th><th class="c-maghrib">🌇 Maghrib</th><th>Isha</th><th>Fast</th></tr></thead>
+                    <tbody>${currentData.map((d,i)=>{
+                        const ip=d.date<today,ic=d.date===today;
+                        const dn=new Date(d.date).toLocaleDateString('en-US',{weekday:'short'});
+                        return `<tr id="day-${i}" class="${ip?'past':''} ${ic?'current':''}" onclick="selectDay(${i})">
+                            <td class="c-day">${d.day}</td><td class="c-date">${dn} ${new Date(d.date).getDate()}</td>
+                            <td class="c-fajr">${d.fajr}</td><td class="c-prayer">${d.dhuhr}</td>
+                            <td class="c-prayer">${d.asr}</td><td class="c-maghrib">${d.maghrib}</td>
+                            <td class="c-prayer">${d.isha}</td><td class="c-fast">${d.duration}</td>
+                        </tr>`;
+                    }).join('')}</tbody></table>`;
+            } else {
+                c.innerHTML = `<div class="days-grid">${currentData.map((d,i)=>{
+                    const ip=d.date<today,ic=d.date===today;
+                    return `<div class="day-tile ${ip?'past':''} ${ic?'current':''}" id="day-${i}" onclick="selectDay(${i})">
+                        <div class="tile-num">${d.day}</div>
+                        <div class="tile-fajr">${d.fajr}</div>
+                        <div class="tile-maghrib">${d.maghrib}</div>
+                    </div>`;
+                }).join('')}</div>`;
+            }
         }
-        function switchCity(city){currentCity=city;currentData=city==='jeddah'?jeddahData:riyadhData;['jeddah','riyadh'].forEach(c=>{document.getElementById('btn-'+c).classList.toggle('active',c===city);document.getElementById('comp-'+c).classList.toggle('active',c===city);});currentDayIndex=getCurrentDayIndex();renderHeader();renderDays();}
-        function setView(v){currentView=v;document.getElementById('btn-list').classList.toggle('active',v==='list');document.getElementById('btn-grid').classList.toggle('active',v==='grid');renderDays();}
-        function toggleView(){setView(currentView==='list'?'grid':'list');}
-        function scrollToToday(){if(currentDayIndex!==-1){const el=document.getElementById('day-'+currentDayIndex);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});}document.getElementById('mainScroll').scrollTo({top:0,behavior:'smooth'});}
-        function scrollToTop(){document.getElementById('mainScroll').scrollTo({top:0,behavior:'smooth'});updateNavActive(0);}
-        function scrollToCalendar(){document.querySelector('.calendar-section').scrollIntoView({behavior:'smooth'});updateNavActive(1);}
-        function updateNavActive(i){document.querySelectorAll('.nav-item').forEach((el,j)=>el.classList.toggle('active',j===i));}
-        function selectDay(i){const d=currentData[i];alert(`Day ${d.day} - ${new Date(d.date).toDateString()}\n\n🌅 Fajr: ${d.fajr}\n☀️ Dhuhr: ${d.dhuhr}\n🌤️ Asr: ${d.asr}\n🌇 Maghrib: ${d.maghrib}\n🌙 Isha: ${d.isha}\n\n⏱️ Fasting: ${d.duration}`);}
-        function showPrayerInfo(n,t){alert(`${n} Prayer\nTime: ${t}\n\nTap any day in the calendar for full details.`);}
-        function showAppInfo(){alert('🌙 Ramadan 2026\n\n📅 Feb 18 - Mar 19, 2026\n🕌 1447 AH\n\n• Fajr & Maghrib highlighted in gold\n• Based on Umm al-Qura calendar\n• Tap any element for more info');}
-        function refreshCountdown(){updateCountdown();alert('Countdown refreshed!');}
-        function showProgressDetail(){const done=currentDayIndex,left=30-currentDayIndex,pct=Math.round(done/30*100);alert(`Ramadan Progress\n\n✅ Completed: ${done} days\n⏳ Remaining: ${left} days\n📊 Progress: ${pct}%\n\nKeep going! 💪`);}
-        function showStatDetail(t){const m={done:`${currentDayIndex} days completed!\n\nYou're doing great! 🌟`,left:`${30-currentDayIndex} days remaining\n\nMake the most of them! 🤲`,fast:'Average fast: ~13 hours\n\nFrom Fajr to Maghrib',prayers:'150 prayers this Ramadan\n\n5 prayers × 30 days'};alert(m[t]);}
-        document.getElementById('mainScroll').addEventListener('scroll',e=>{const jb=document.getElementById('jumpBtn');e.target.scrollTop>200?jb.classList.remove('hidden'):jb.classList.add('hidden');});
-        function init(){currentDayIndex=getCurrentDayIndex();renderHeader();renderDays();setTimeout(scrollToToday,500);}
+
+        function switchCity(city) {
+            currentCity = city; currentData = city==='jeddah'?jeddahData:riyadhData;
+            ['jeddah','riyadh'].forEach(c=>{
+                document.getElementById('btn-'+c).classList.toggle('active',c===city);
+                document.getElementById('comp-'+c).classList.toggle('active',c===city);
+            });
+            currentDayIndex = getCurrentDayIndex();
+            renderHeader(); renderDays(); tick();
+        }
+
+        function setView(v) {
+            currentView=v;
+            document.getElementById('btn-list').classList.toggle('active',v==='list');
+            document.getElementById('btn-grid').classList.toggle('active',v==='grid');
+            renderDays();
+        }
+
+        function scrollToToday() {
+            if(currentDayIndex!==-1){const el=document.getElementById('day-'+currentDayIndex);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});}
+        }
+
+        function selectDay(i){const d=currentData[i];alert(`Day ${d.day} — ${new Date(d.date).toDateString()}\n\n🌅 Fajr: ${d.fajr}\n☀️ Dhuhr: ${d.dhuhr}\n🌤️ Asr: ${d.asr}\n🌇 Maghrib (Iftar): ${d.maghrib}\n🌙 Isha: ${d.isha}\n\n⏱️ Fasting: ${d.duration}`);}
+        function showPrayerInfo(n,t){alert(`${n}\nTime: ${t}`);}
+        function showAppInfo(){alert('🌙 Ramadan 1447 / 2026\n📅 Feb 18 – Mar 19, 2026\n\n• Based on Umm al-Qura calendar\n• Fajr & Maghrib highlighted in gold\n• Iftar countdown updates live');}
+        function showMaghribInfo(){const d=currentDayIndex>=0?currentData[currentDayIndex]:null;if(!d)return;alert(`🌇 Maghrib / Iftar\n\nToday's Iftar: ${d.maghrib}\nFasting duration: ${d.duration}\n\nMay your fast be accepted! 🤲`);}
+        function showProgressDetail(){const done=currentDayIndex,left=30-done,pct=Math.round(done/30*100);alert(`Ramadan Progress\n\n✅ Completed: ${done} days\n⏳ Remaining: ${left} days\n📊 Progress: ${pct}%`);}
+        function showStatDetail(t){const m={done:`${currentDayIndex} days completed! 🌟`,left:`${30-currentDayIndex} days remaining 🤲`,fast:'Average fast: ~13 hours\nFajr to Maghrib',prayers:'150 prayers total\n5 × 30 days'};alert(m[t]);}
+
+        function init() {
+            currentDayIndex = getCurrentDayIndex();
+            renderHeader();
+            renderDays();
+            tick();
+            if(mainInterval) clearInterval(mainInterval);
+            mainInterval = setInterval(tick, 1000);
+            setTimeout(scrollToToday, 600);
+        }
+
         init();
     </script>
 </body>
